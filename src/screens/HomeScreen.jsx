@@ -3,6 +3,7 @@ import Product from "../components/Product"
 import products from "../products"
 import { Typography, Grid } from "@mui/material"
 
+
 function HomeScreen() {
   return (
     <main style={{marginTop: '50px'}}>
