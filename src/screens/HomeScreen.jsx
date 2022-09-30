@@ -5,7 +5,7 @@ import {
 } from '@mui/material'
 import Product from '../components/Product'
 import Loader from '../components/Loader'
-import { fetchProducts } from '../reducers/productReducers'
+import { fetchProducts } from '../reducers/productReducer'
 
 function HomeScreen() {
   const dispatch = useDispatch()
@@ -35,7 +35,7 @@ function HomeScreen() {
 
   return (
     <main style={{ marginTop: '120px' }}>
-      <Typography variant="h3" component="h1">
+      <Typography variant="h1" component="h2" sx={{ textTransform: 'uppercase' }}>
         Latest Products
       </Typography>
       <Grid container spacing={2} mt={2} justifyContent="center">

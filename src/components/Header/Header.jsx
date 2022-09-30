@@ -11,15 +11,22 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
+import Link from '@mui/material/Link'
 import './Header.css'
 import { ShoppingCart } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import { grey } from '@mui/material/colors'
+import { useSelector, useDispatch } from 'react-redux'
 import logo from '../../logo.png'
+import { logout } from '../../reducers/userLoginReducer'
 
-const pages = ['Cart']
-const settings = ['Profile', 'Account', 'Logout']
+const pages = ['cart']
 
 function ResponsiveAppBar() {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const loginState = useSelector((state) => state.userLogin)
+  const { isLoggedIn } = loginState
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
 
@@ -38,6 +45,11 @@ function ResponsiveAppBar() {
     setAnchorElUser(null)
   }
 
+  const handleLogout = () => {
+    dispatch(logout())
+    navigate('/')
+  }
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -46,7 +58,8 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+            sx={{ mr: 2, display: { xs: 'none', md: 'flex', cursor: 'pointer' } }}
+            onClick={() => { navigate('/') }}
           >
             <img src={logo} alt="logo" className="logo" />
           </Box>
@@ -80,18 +93,17 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Button startIcon={<ShoppingCart />}>{page}</Button>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Button startIcon={<ShoppingCart />} />
+              </MenuItem>
             </Menu>
           </Box>
           <Box
             variant="h6"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', cursor: 'pointer' } }}
+            onClick={() => { navigate('/') }}
           >
             <img src={logo} alt="logo" className="logo" />
           </Box>
@@ -100,59 +112,90 @@ function ResponsiveAppBar() {
               flexGrow: 1,
               display: { xs: 'none', md: 'flex' },
               gap: '10px',
+              justifyContent: 'flex-end',
             }}
           >
             {pages.map((page) => (
               <Link
                 key={page}
                 to={`/${page}`}
-                style={{ textDecorator: 'none' }}
+                component={RouterLink}
               >
-                <Button
+                <IconButton
                   key={page}
                   onClick={handleCloseNavMenu}
-                  sx={{
-                    my: 2,
-                    color: 'white',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                  startIcon={<ShoppingCart />}
+                  color="neutral"
+                  size="medium"
                 >
-                  {page}
-                </Button>
+                  <ShoppingCart />
+
+                </IconButton>
               </Link>
             ))}
           </Box>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" sx={{ bgcolor: '#fff', color: grey[700] }} />
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+
+            {isLoggedIn ? (
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link to="/profile" component={RouterLink} underline="none">
+                    <Typography variant="body2" textAlign="center">Profile</Typography>
+                  </Link>
                 </MenuItem>
-              ))}
-            </Menu>
+                <MenuItem onClick={handleLogout}>
+                  <Typography variant="body2" textAlign="center">Sign out</Typography>
+                </MenuItem>
+              </Menu>
+            ) : (
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link to="/login" component={RouterLink} underline="none">
+                    <Typography variant="body2" textAlign="center">Sign in</Typography>
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link to="/register" component={RouterLink} underline="none">
+                    <Typography variant="body2" textAlign="center">Sign up</Typography>
+                  </Link>
+                </MenuItem>
+              </Menu>
+            )}
           </Box>
         </Toolbar>
       </Container>

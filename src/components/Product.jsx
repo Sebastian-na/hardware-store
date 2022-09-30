@@ -9,26 +9,25 @@ import {
   CardActionArea,
 } from '@mui/material'
 import { Link } from 'react-router-dom'
+import Image from 'material-ui-image'
 
 function Product({ product }) {
   return (
     <CardActionArea>
       <Card variant="outlined" sx={{ padding: 3, margin: 'auto' }}>
         <Link to={`/product/${product._id}`}>
-          <CardMedia component="img" image={product.image} />
+          <CardMedia>
+            <Image src={product.image} alt={product.name} />
+          </CardMedia>
         </Link>
         <CardContent>
           <Typography
             gutterBottom
             variant="h5"
-            component="h2"
+            component="h3"
             sx={{ textTransform: 'uppercase' }}
           >
             {product.name}
-          </Typography>
-
-          <Typography variant="body2" color="textSecondary" component="p">
-            {product.description}
           </Typography>
 
           <Box mt={2} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -49,7 +48,7 @@ function Product({ product }) {
             </Typography>
           </Box>
 
-          <Typography variant="h4" component="p">
+          <Typography variant="h4" component="p" mt={2}>
             $
             {product.price}
           </Typography>

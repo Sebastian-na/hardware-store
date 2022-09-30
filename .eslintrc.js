@@ -17,5 +17,6 @@ module.exports = {
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
     'no-param-reassign': 0,
     'react/prop-types': 'off',
+    'react/jsx-props-no-spreading': 'off',
   },
 }

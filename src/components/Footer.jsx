@@ -17,7 +17,7 @@ function Footer() {
       }}
     >
       <footer>
-        <Typography textAlign="center">Copyright &copy; Hardware</Typography>
+        <Typography variant="body2" textAlign="center">Copyright &copy; Hardware</Typography>
       </footer>
     </Container>
   )

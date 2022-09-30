@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   Box,
@@ -13,6 +13,10 @@ import {
   Divider,
   Alert,
   AlertTitle,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material'
 import { ArrowBack } from '@mui/icons-material'
 import Image from 'material-ui-image'
@@ -21,6 +25,7 @@ import Loader from '../components/Loader'
 import { fetchProductDetail } from '../reducers/productDetailReducer'
 
 function ProductScreen() {
+  const [qty, setQty] = useState(1)
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -30,6 +35,10 @@ function ProductScreen() {
   useEffect(async () => {
     dispatch(fetchProductDetail(id))
   }, [])
+
+  const handleAddToCart = () => {
+    navigate(`/cart/${id}/?qty=${qty}`)
+  }
 
   if (loading) {
     return <Loader />
@@ -61,7 +70,7 @@ function ProductScreen() {
         <Grid item xs={12} sm={9} md={5} lg={5} xl={5} sx={{ mx: 'auto' }}>
           <Card variant="outlined">
             <CardMedia>
-              <Image src={product.image} alt={product.name} />
+              <Image src={product.image || ''} alt={product.name} />
             </CardMedia>
           </Card>
         </Grid>
@@ -88,7 +97,7 @@ function ProductScreen() {
               value={parseFloat(product.rating)}
               readOnly
             />
-            <Typography variant="body1" component="p" ml={2}>
+            <Typography variant="body2" component="p" ml={2}>
               {product.numReviews}
               {' '}
               reviews
@@ -101,13 +110,13 @@ function ProductScreen() {
               mb: 2,
             }}
           >
-            <Typography variant="body1" component="p">
+            <Typography variant="h5" component="p">
               Price: $
               {product.price}
             </Typography>
           </Box>
           <Divider />
-          <Typography variant="body1" component="p" mt={4}>
+          <Typography variant="body2" component="p" mt={4}>
             {product.description}
           </Typography>
         </Grid>
@@ -115,33 +124,49 @@ function ProductScreen() {
           <Card variant="outlined">
             <CardContent>
               <Grid container justifyContent="space-between" mb={1}>
-                <Typography variant="subtitle1" component="h3">
+                <Typography variant="body2" component="h3">
                   Price:
                 </Typography>
-                <Typography variant="body1" component="p">
+                <Typography variant="body2" component="p">
                   $
                   {product.price}
                 </Typography>
               </Grid>
               <Divider />
               <Grid container justifyContent="space-between" mt={1} mb={1}>
-                <Typography variant="subtitle1" component="h4">
+                <Typography variant="body2" component="h4">
                   Status:
                 </Typography>
-                <Typography variant="body1" component="p">
+                <Typography variant="body2" component="p">
                   {product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
                 </Typography>
               </Grid>
               <Divider />
+              <Grid container justifyContent="space-between" mt={2}>
+                <FormControl fullWidth color="secondary">
+                  <InputLabel>Quantity</InputLabel>
+                  <Select
+                    value={qty}
+                    label="Quantity"
+                    onChange={(e) => setQty(e.target.value)}
+                    size="small"
+                  >
+                    {[...Array(product.countInStock).keys()].map((x) => (
+                      <MenuItem key={x + 1} value={x + 1}>{x + 1}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
             </CardContent>
             <CardActions>
               <Box pt={1} pb={1} sx={{ width: '100%' }}>
                 <Button
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   sx={{ mx: 'auto', height: '100%' }}
                   fullWidth
                   disabled={product.countInStock === 0}
+                  onClick={() => handleAddToCart()}
                 >
                   Add to Cart
                 </Button>
