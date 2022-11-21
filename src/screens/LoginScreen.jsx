@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Grid, Button, FormControl, Typography, Alert,
+  Grid, Button, FormControl, Typography, Alert, Input, InputLabel, FormHelperText,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import Loader from '../components/Loader'
-import CustomTextField from '../components/CustomTextField'
 import { login, removeError } from '../reducers/userLoginReducer'
 
 function LoginScreen() {
@@ -18,15 +17,15 @@ function LoginScreen() {
   const [searchParams] = useSearchParams()
   const redirect = searchParams.get('redirect') || '/'
 
+  const submitHandler = () => {
+    dispatch(login({ username: email, password }))
+  }
+
   useEffect(() => {
     if (isLoggedIn) {
       navigate(redirect)
     }
   }, [isLoggedIn])
-
-  const submitHandler = () => {
-    dispatch(login({ username: email, password }))
-  }
 
   useEffect(
     () => {
@@ -38,31 +37,48 @@ function LoginScreen() {
   )
 
   return (
-    <Grid container justifyContent="center" maxWidth={800} mx="auto" my={8}>
+    <Grid container mt={2} spacing={4}>
+      <Grid item xs={12} textAlign="center"><Typography component="h1" variant="h2">SIGN IN</Typography></Grid>
       <Grid item xs={12}>
-
-        <FormControl fullWidth sx={{ gap: 1.6 }}>
-          {error && <Alert severity="error">{error}</Alert>}
-          <Typography variant="h2" align="center">SIGN IN</Typography>
-          <CustomTextField
+        {error && <Alert severity="error">{error}</Alert>}
+      </Grid>
+      <Grid item xs={12} textAlign="center">
+        <FormControl>
+          <InputLabel htmlFor="email">Email</InputLabel>
+          <Input
+            id="email"
+            name="email"
             value={email}
-            label="Email"
-            fullWidth
             onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            error={!!error}
           />
-          <CustomTextField
-            value={password}
-            label="Password"
-            fullWidth
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            error={!!error}
-          />
-          <Button color="secondary" variant="outlined" onClick={submitHandler}>Login</Button>
+          <FormHelperText>Enter your email</FormHelperText>
         </FormControl>
       </Grid>
+      <Grid item xs={12} textAlign="center">
+        <FormControl>
+          <InputLabel htmlFor="password">Password</InputLabel>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <FormHelperText>Enter your password</FormHelperText>
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} textAlign="center">
+        <Button
+          variant="contained"
+          color="secondary"
+          size="large"
+          onClick={submitHandler}
+          disabled={isLoading}
+        >
+          {isLoading ? <Loader /> : 'SIGN IN'}
+        </Button>
+      </Grid>
+
       <Grid item xs={12}>
         <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }} mt={4}>
           New Customer?
@@ -70,7 +86,6 @@ function LoginScreen() {
           <Link to={redirect ? `/register/?redirect=${redirect}` : '/register'}>Sign up</Link>
         </Typography>
       </Grid>
-      {isLoading && <Loader />}
     </Grid>
   )
 }

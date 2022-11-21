@@ -184,12 +184,12 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem onClick={handleCloseNavMenu}>
+                <MenuItem onClick={handleCloseUserMenu}>
                   <Link to="/login" component={RouterLink} underline="none">
                     <Typography variant="body2" textAlign="center">Sign in</Typography>
                   </Link>
                 </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
+                <MenuItem onClick={handleCloseUserMenu}>
                   <Link to="/register" component={RouterLink} underline="none">
                     <Typography variant="body2" textAlign="center">Sign up</Typography>
                   </Link>

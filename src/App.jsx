@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import theme from './muiTheme'
 import {
   ProductScreen, HomeScreen, CartScreen, LoginScreen, RegisterScreen,
+  ProfileScreen, ShippingScreen, PaymentScreen, PlaceOrderScreen,
 } from './screens'
 
 function App() {
@@ -30,7 +31,10 @@ function App() {
                 <Route path="/cart/:id" element={<CartScreen />} />
                 <Route path="/login/" element={<LoginScreen />} />
                 <Route path="/register/" element={<RegisterScreen />} />
-
+                <Route path="/profile/" element={<ProfileScreen />} />
+                <Route path="/shipping/" element={<ShippingScreen />} />
+                <Route path="/payment/" element={<PaymentScreen />} />
+                <Route path="/placeorder/" element={<PlaceOrderScreen />} />
               </Routes>
             </Container>
           </div>

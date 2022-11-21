@@ -23,6 +23,7 @@ import Image from 'material-ui-image'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../components/Loader'
 import { fetchProductDetail } from '../reducers/productDetailReducer'
+import format from '../utils/currencyFormatter'
 
 function ProductScreen() {
   const [qty, setQty] = useState(1)
@@ -111,8 +112,9 @@ function ProductScreen() {
             }}
           >
             <Typography variant="h5" component="p">
-              Price: $
-              {product.price}
+              Price:
+              {' '}
+              {format(product.price)}
             </Typography>
           </Box>
           <Divider />
@@ -128,8 +130,7 @@ function ProductScreen() {
                   Price:
                 </Typography>
                 <Typography variant="body2" component="p">
-                  $
-                  {product.price}
+                  {format(product.price)}
                 </Typography>
               </Grid>
               <Divider />
@@ -143,7 +144,7 @@ function ProductScreen() {
               </Grid>
               <Divider />
               <Grid container justifyContent="space-between" mt={2}>
-                <FormControl fullWidth color="secondary">
+                <FormControl fullWidth>
                   <InputLabel>Quantity</InputLabel>
                   <Select
                     value={qty}
@@ -162,7 +163,6 @@ function ProductScreen() {
               <Box pt={1} pb={1} sx={{ width: '100%' }}>
                 <Button
                   variant="contained"
-                  color="secondary"
                   sx={{ mx: 'auto', height: '100%' }}
                   fullWidth
                   disabled={product.countInStock === 0}

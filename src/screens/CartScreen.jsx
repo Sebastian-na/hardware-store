@@ -10,6 +10,7 @@ import {
 import Image from 'material-ui-image'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { addToCart, removeFromCart } from '../reducers/cartReducer'
+import format from '../utils/currencyFormatter'
 
 function CartScreen() {
   const dispatch = useDispatch()
@@ -72,12 +73,11 @@ function CartScreen() {
                 </Grid>
                 <Grid item xs={3} sm={3}>
                   <Typography variant="body2" align="center">
-                    $
-                    {product.price}
+                    {format(product.price)}
                   </Typography>
                 </Grid>
                 <Grid item xs={3} sm={2} display="flex" justifyContent="center">
-                  <FormControl size="small" color="secondary" fullWidth>
+                  <FormControl size="small" fullWidth>
                     <Select
                       value={product.qty}
                       size="small"
@@ -119,14 +119,12 @@ function CartScreen() {
               Total:
             </Typography>
             <Typography variant="body1" component="span" ml={1}>
-              $
-              {cart.reduce((a, b) => a + b.price * b.qty, 0)}
+              {format(cart.reduce((a, b) => a + b.price * b.qty, 0))}
             </Typography>
           </CardContent>
           <CardActions>
             <Button
               variant="contained"
-              color="secondary"
               size="large"
               fullWidth
               disabled={cart.length === 0}

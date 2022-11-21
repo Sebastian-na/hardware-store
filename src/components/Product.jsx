@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import { Link } from 'react-router-dom'
 import Image from 'material-ui-image'
+import format from '../utils/currencyFormatter'
 
 function Product({ product }) {
   return (
@@ -49,8 +50,7 @@ function Product({ product }) {
           </Box>
 
           <Typography variant="h4" component="p" mt={2}>
-            $
-            {product.price}
+            {format(product.price)}
           </Typography>
         </CardContent>
       </Card>
